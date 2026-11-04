@@ -59,7 +59,8 @@ export default buildConfig({
       token: process.env.BLOB_READ_WRITE_TOKEN,
       alwaysInsertFields: true,
       clientUploads: true,
-      addRandomSuffix: true,
+      // Payload reserves unique filenames before constructing media response URLs.
+      addRandomSuffix: false,
     }),
   ],
   sharp,
