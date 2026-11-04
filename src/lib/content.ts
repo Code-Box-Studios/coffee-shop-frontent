@@ -23,14 +23,19 @@ function textSection<T extends Record<string, string>>(value: unknown, defaults:
 function imageAsset(value: unknown, fallback: ImageAsset): ImageAsset {
   const image = record(value)
   let src = text(image.url, '')
+  let isBlob = false
   if (/^https?:\/\//.test(src)) {
     try {
-      src = new URL(src).pathname
+      const url = new URL(src)
+      isBlob =
+        url.protocol === 'https:' &&
+        /^[a-z0-9]+\.public\.blob\.vercel-storage\.com$/i.test(url.hostname)
+      src = isBlob ? url.href : url.pathname
     } catch {
       src = ''
     }
   }
-  if (!/^\/(?:api\/media\/file|media|images)\//.test(src)) return { ...fallback }
+  if (!isBlob && !/^\/(?:api\/media\/file|media|images)\//.test(src)) return { ...fallback }
   return {
     src,
     alt: text(image.alt, fallback.alt),

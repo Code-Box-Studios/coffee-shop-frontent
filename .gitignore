@@ -7,6 +7,8 @@ coverage/
 playwright-report/
 test-results/
 .superpowers/
+.deployment-private/
+.vercel/
 .env
 .env.*
 !.env.example

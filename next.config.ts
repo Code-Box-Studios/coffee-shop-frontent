@@ -4,6 +4,9 @@ import type { NextConfig } from 'next'
 const config: NextConfig = {
   distDir: process.env.NODE_ENV === 'development' ? '.next-dev' : '.next',
   poweredByHeader: false,
+  images: {
+    remotePatterns: [{ protocol: 'https', hostname: '*.public.blob.vercel-storage.com' }],
+  },
   experimental: { cpus: 2 },
 }
 

@@ -75,3 +75,23 @@ test('populated Payload uploads replace the sample photos and carry accessible d
     height: 900,
   })
 })
+
+test('Vercel Blob media retains its HTTPS URL instead of pointing at a missing local file', () => {
+  const url = 'https://ember123.public.blob.vercel-storage.com/media/mocha.webp'
+  const result = normalizeContent({
+    menu: [{ status: 'published', image: { url, alt: 'Fresh mocha' } }],
+  })
+  assert.equal(result.menu[0].image.src, url)
+  assert.equal(result.menu[0].image.alt, 'Fresh mocha')
+})
+
+test('untrusted and insecure remote media URLs retain the bundled image fallback', () => {
+  for (const url of [
+    'https://example.com/mocha.webp',
+    'http://ember123.public.blob.vercel-storage.com/mocha.webp',
+    'https://ember123.public.blob.vercel-storage.com.evil.example/mocha.webp',
+  ]) {
+    const result = normalizeContent({ menu: [{ status: 'published', image: { url } }] })
+    assert.match(result.menu[0].image.src, /^\/images\//)
+  }
+})

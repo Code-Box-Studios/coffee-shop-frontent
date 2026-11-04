@@ -69,6 +69,30 @@ Do not apply the initial migration to a development database already managed by 
 
 SQLite and uploaded media require persistent writable storage. This setup fits a Node server with a persistent disk. For deployments with ephemeral filesystems, configure an appropriate Payload database and storage adapter before deploying. `MEDIA_DIR` can override the local upload directory.
 
+### Vercel with Neon and Blob
+
+Postgres URLs (`postgres://` or `postgresql://`) select the Postgres adapter. File URLs retain SQLite for local development. The database engines have separate migration histories: `src/migrations/postgres/` and `src/migrations/` respectively. Postgres schema push is disabled in every environment; apply migrations before using a new database.
+
+Configure these **production** environment variables in Vercel:
+
+- `DATABASE_URL`: the pooled Neon connection URL for a scoped runtime role. Use `sslmode=verify-full` to require certificate verification.
+- `PAYLOAD_SECRET`: a separate production secret of at least 32 random characters.
+- `NEXT_PUBLIC_SERVER_URL`: the production HTTPS origin.
+- `BLOB_READ_WRITE_TOKEN`: the public Vercel Blob store token. The Payload storage plugin disables local upload writes and enables authenticated client uploads for files larger than Vercel's request limit.
+
+Run migrations separately with the database owner connection, before deployment. Keep this connection out of the deployed runtime environment. For example, with private owner credentials in `.env.neon`:
+
+```bash
+NODE_ENV=production pnpm exec tsx --env-file=.env.neon ./node_modules/payload/bin.js migrate
+pnpm build
+```
+
+Grant the runtime role schema usage, table read/write access, and sequence usage; configure the owner's default privileges for future migrations. The runtime role does not need schema creation rights or membership in `neon_superuser`. Keep the Neon database and Vercel function region close together, such as Singapore (`aws-ap-southeast-1` and `sin1`).
+
+Use a separate database and secret if preview deployments need a working CMS. Production variables are intentionally scoped to production. Vercel builds fail clearly when Postgres or Blob configuration is missing.
+
+For the first deployment, keep Vercel authentication enabled until an administrator has been created and content imported. Then allow public production access while retaining preview protection. Administrator credentials and migration exports belong in ignored private files, never Git.
+
 Outbound email is not configured. Password reset email delivery requires a Payload email adapter before production use. No email delivery is claimed by the local setup.
 
 ## Structure
