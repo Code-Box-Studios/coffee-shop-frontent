@@ -5,188 +5,188 @@ export async function up({ db, payload, req }: MigrateUpArgs): Promise<void> {
    CREATE TYPE "public"."enum_menu_items_status" AS ENUM('draft', 'published');
   CREATE TYPE "public"."enum_site_settings_currency" AS ENUM('PHP', 'USD', 'EUR', 'GBP');
   CREATE TABLE "users_sessions" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" integer NOT NULL,
-  	"id" varchar PRIMARY KEY NOT NULL,
-  	"created_at" timestamp(3) with time zone,
-  	"expires_at" timestamp(3) with time zone NOT NULL
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "id" varchar PRIMARY KEY NOT NULL,
+    "created_at" timestamp(3) with time zone,
+    "expires_at" timestamp(3) with time zone NOT NULL
   );
-  
+
   CREATE TABLE "users" (
-  	"id" serial PRIMARY KEY NOT NULL,
-  	"name" varchar NOT NULL,
-  	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
-  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
-  	"email" varchar NOT NULL,
-  	"reset_password_token" varchar,
-  	"reset_password_expiration" timestamp(3) with time zone,
-  	"salt" varchar,
-  	"hash" varchar,
-  	"reset_password_requested_at" timestamp(3) with time zone,
-  	"login_attempts" numeric DEFAULT 0,
-  	"lock_until" timestamp(3) with time zone
+    "id" serial PRIMARY KEY NOT NULL,
+    "name" varchar NOT NULL,
+    "updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+    "created_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+    "email" varchar NOT NULL,
+    "reset_password_token" varchar,
+    "reset_password_expiration" timestamp(3) with time zone,
+    "salt" varchar,
+    "hash" varchar,
+    "reset_password_requested_at" timestamp(3) with time zone,
+    "login_attempts" numeric DEFAULT 0,
+    "lock_until" timestamp(3) with time zone
   );
-  
+
   CREATE TABLE "media" (
-  	"id" serial PRIMARY KEY NOT NULL,
-  	"alt" varchar NOT NULL,
-  	"source_key" varchar,
-  	"prefix" varchar DEFAULT '',
-  	"_objectkey" varchar,
-  	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
-  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
-  	"url" varchar,
-  	"thumbnail_u_r_l" varchar,
-  	"filename" varchar,
-  	"mime_type" varchar,
-  	"filesize" numeric,
-  	"width" numeric,
-  	"height" numeric,
-  	"focal_x" numeric,
-  	"focal_y" numeric,
-  	"sizes_preview_url" varchar,
-  	"sizes_preview_width" numeric,
-  	"sizes_preview_height" numeric,
-  	"sizes_preview_mime_type" varchar,
-  	"sizes_preview_filesize" numeric,
-  	"sizes_preview_filename" varchar
+    "id" serial PRIMARY KEY NOT NULL,
+    "alt" varchar NOT NULL,
+    "source_key" varchar,
+    "prefix" varchar DEFAULT '',
+    "_objectkey" varchar,
+    "updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+    "created_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+    "url" varchar,
+    "thumbnail_u_r_l" varchar,
+    "filename" varchar,
+    "mime_type" varchar,
+    "filesize" numeric,
+    "width" numeric,
+    "height" numeric,
+    "focal_x" numeric,
+    "focal_y" numeric,
+    "sizes_preview_url" varchar,
+    "sizes_preview_width" numeric,
+    "sizes_preview_height" numeric,
+    "sizes_preview_mime_type" varchar,
+    "sizes_preview_filesize" numeric,
+    "sizes_preview_filename" varchar
   );
-  
+
   CREATE TABLE "menu_items_flavor_notes" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" integer NOT NULL,
-  	"id" varchar PRIMARY KEY NOT NULL,
-  	"note" varchar NOT NULL
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "id" varchar PRIMARY KEY NOT NULL,
+    "note" varchar NOT NULL
   );
-  
+
   CREATE TABLE "menu_items" (
-  	"id" serial PRIMARY KEY NOT NULL,
-  	"title" varchar NOT NULL,
-  	"emphasis" varchar,
-  	"slug" varchar NOT NULL,
-  	"price" numeric NOT NULL,
-  	"description" varchar,
-  	"details" varchar,
-  	"eyebrow" varchar,
-  	"image_id" integer,
-  	"image_caption" varchar,
-  	"action_label" varchar DEFAULT 'A little more',
-  	"order" numeric DEFAULT 0,
-  	"status" "enum_menu_items_status" DEFAULT 'draft' NOT NULL,
-  	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
-  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
+    "id" serial PRIMARY KEY NOT NULL,
+    "title" varchar NOT NULL,
+    "emphasis" varchar,
+    "slug" varchar NOT NULL,
+    "price" numeric NOT NULL,
+    "description" varchar,
+    "details" varchar,
+    "eyebrow" varchar,
+    "image_id" integer,
+    "image_caption" varchar,
+    "action_label" varchar DEFAULT 'A little more',
+    "order" numeric DEFAULT 0,
+    "status" "enum_menu_items_status" DEFAULT 'draft' NOT NULL,
+    "updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+    "created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
   );
-  
+
   CREATE TABLE "payload_kv" (
-  	"id" serial PRIMARY KEY NOT NULL,
-  	"key" varchar NOT NULL,
-  	"data" jsonb NOT NULL
+    "id" serial PRIMARY KEY NOT NULL,
+    "key" varchar NOT NULL,
+    "data" jsonb NOT NULL
   );
-  
+
   CREATE TABLE "payload_locked_documents" (
-  	"id" serial PRIMARY KEY NOT NULL,
-  	"global_slug" varchar,
-  	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
-  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
+    "id" serial PRIMARY KEY NOT NULL,
+    "global_slug" varchar,
+    "updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+    "created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
   );
-  
+
   CREATE TABLE "payload_locked_documents_rels" (
-  	"id" serial PRIMARY KEY NOT NULL,
-  	"order" integer,
-  	"parent_id" integer NOT NULL,
-  	"path" varchar NOT NULL,
-  	"users_id" integer,
-  	"media_id" integer,
-  	"menu_items_id" integer
+    "id" serial PRIMARY KEY NOT NULL,
+    "order" integer,
+    "parent_id" integer NOT NULL,
+    "path" varchar NOT NULL,
+    "users_id" integer,
+    "media_id" integer,
+    "menu_items_id" integer
   );
-  
+
   CREATE TABLE "payload_preferences" (
-  	"id" serial PRIMARY KEY NOT NULL,
-  	"key" varchar,
-  	"value" jsonb,
-  	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
-  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
+    "id" serial PRIMARY KEY NOT NULL,
+    "key" varchar,
+    "value" jsonb,
+    "updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+    "created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
   );
-  
+
   CREATE TABLE "payload_preferences_rels" (
-  	"id" serial PRIMARY KEY NOT NULL,
-  	"order" integer,
-  	"parent_id" integer NOT NULL,
-  	"path" varchar NOT NULL,
-  	"users_id" integer
+    "id" serial PRIMARY KEY NOT NULL,
+    "order" integer,
+    "parent_id" integer NOT NULL,
+    "path" varchar NOT NULL,
+    "users_id" integer
   );
-  
+
   CREATE TABLE "payload_migrations" (
-  	"id" serial PRIMARY KEY NOT NULL,
-  	"name" varchar,
-  	"batch" numeric,
-  	"updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
-  	"created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
+    "id" serial PRIMARY KEY NOT NULL,
+    "name" varchar,
+    "batch" numeric,
+    "updated_at" timestamp(3) with time zone DEFAULT now() NOT NULL,
+    "created_at" timestamp(3) with time zone DEFAULT now() NOT NULL
   );
-  
+
   CREATE TABLE "homepage" (
-  	"id" serial PRIMARY KEY NOT NULL,
-  	"hero_kicker" varchar DEFAULT 'A LITTLE SLOWER. A LITTLE BETTER.',
-  	"hero_first_word" varchar DEFAULT 'SLOW',
-  	"hero_second_word" varchar DEFAULT 'DOWN.',
-  	"hero_caption" varchar DEFAULT 'The world can wait.
+    "id" serial PRIMARY KEY NOT NULL,
+    "hero_kicker" varchar DEFAULT 'A LITTLE SLOWER. A LITTLE BETTER.',
+    "hero_first_word" varchar DEFAULT 'SLOW',
+    "hero_second_word" varchar DEFAULT 'DOWN.',
+    "hero_caption" varchar DEFAULT 'The world can wait.
   Really good coffee can’t.',
-  	"hero_badge" varchar DEFAULT 'GOOD COFFEE · NO SHORTCUTS · ',
-  	"origin_label" varchar DEFAULT '01 / GOOD THINGS HAVE GOOD ROOTS',
-  	"origin_title" varchar DEFAULT 'A little',
-  	"origin_emphasis" varchar DEFAULT 'obsession.',
-  	"origin_closing" varchar DEFAULT 'In every bean.',
-  	"origin_body" varchar DEFAULT 'Before the first sip, there’s a whole story. Thoughtfully chosen beans. People who care. A thousand tiny details that make a big difference.',
-  	"origin_footnote" varchar DEFAULT 'SOURCED WITH INTENTION. ALWAYS.',
-  	"roast_label" varchar DEFAULT '02 / NOTHING GOOD IS RUSHED',
-  	"roast_first_word" varchar DEFAULT 'HEAT.',
-  	"roast_second_word" varchar DEFAULT 'HEART.',
-  	"roast_third_word" varchar DEFAULT 'HANDS.',
-  	"roast_caption" varchar DEFAULT 'Small batches.
+    "hero_badge" varchar DEFAULT 'GOOD COFFEE · NO SHORTCUTS · ',
+    "origin_label" varchar DEFAULT '01 / GOOD THINGS HAVE GOOD ROOTS',
+    "origin_title" varchar DEFAULT 'A little',
+    "origin_emphasis" varchar DEFAULT 'obsession.',
+    "origin_closing" varchar DEFAULT 'In every bean.',
+    "origin_body" varchar DEFAULT 'Before the first sip, there’s a whole story. Thoughtfully chosen beans. People who care. A thousand tiny details that make a big difference.',
+    "origin_footnote" varchar DEFAULT 'SOURCED WITH INTENTION. ALWAYS.',
+    "roast_label" varchar DEFAULT '02 / NOTHING GOOD IS RUSHED',
+    "roast_first_word" varchar DEFAULT 'HEAT.',
+    "roast_second_word" varchar DEFAULT 'HEART.',
+    "roast_third_word" varchar DEFAULT 'HANDS.',
+    "roast_caption" varchar DEFAULT 'Small batches.
   Patient hands.
   A little bit of alchemy.',
-  	"roast_temperature" numeric DEFAULT 93,
-  	"roast_extraction_time" numeric DEFAULT 28,
-  	"pause_label" varchar DEFAULT '03 / THIS ONE’S JUST FOR YOU',
-  	"pause_title" varchar DEFAULT 'A moment.',
-  	"pause_emphasis" varchar DEFAULT 'All yours.',
-  	"pause_body" varchar DEFAULT 'No rush. No noise.
+    "roast_temperature" numeric DEFAULT 93,
+    "roast_extraction_time" numeric DEFAULT 28,
+    "pause_label" varchar DEFAULT '03 / THIS ONE’S JUST FOR YOU',
+    "pause_title" varchar DEFAULT 'A moment.',
+    "pause_emphasis" varchar DEFAULT 'All yours.',
+    "pause_body" varchar DEFAULT 'No rush. No noise.
   Just you, and something good.',
-  	"menu_heading_label" varchar DEFAULT '04 / FOLLOW YOUR GOOD TASTE',
-  	"menu_heading_title" varchar DEFAULT 'Find your',
-  	"menu_heading_emphasis" varchar DEFAULT 'feeling.',
-  	"menu_heading_footer" varchar DEFAULT 'GOOD TASTE COMES NATURALLY.',
-  	"visit_label" varchar DEFAULT '05 / THERE’S A PLACE FOR YOU HERE',
-  	"visit_title" varchar DEFAULT 'Stay a',
-  	"visit_emphasis" varchar DEFAULT 'little.',
-  	"visit_body" varchar DEFAULT 'Bring a book. Bring a friend.
+    "menu_heading_label" varchar DEFAULT '04 / FOLLOW YOUR GOOD TASTE',
+    "menu_heading_title" varchar DEFAULT 'Find your',
+    "menu_heading_emphasis" varchar DEFAULT 'feeling.',
+    "menu_heading_footer" varchar DEFAULT 'GOOD TASTE COMES NATURALLY.',
+    "visit_label" varchar DEFAULT '05 / THERE’S A PLACE FOR YOU HERE',
+    "visit_title" varchar DEFAULT 'Stay a',
+    "visit_emphasis" varchar DEFAULT 'little.',
+    "visit_body" varchar DEFAULT 'Bring a book. Bring a friend.
   We’ll take care of the coffee.',
-  	"visit_image_id" integer,
-  	"updated_at" timestamp(3) with time zone,
-  	"created_at" timestamp(3) with time zone
+    "visit_image_id" integer,
+    "updated_at" timestamp(3) with time zone,
+    "created_at" timestamp(3) with time zone
   );
-  
+
   CREATE TABLE "site_settings_hours" (
-  	"_order" integer NOT NULL,
-  	"_parent_id" integer NOT NULL,
-  	"id" varchar PRIMARY KEY NOT NULL,
-  	"days" varchar NOT NULL,
-  	"time" varchar NOT NULL
+    "_order" integer NOT NULL,
+    "_parent_id" integer NOT NULL,
+    "id" varchar PRIMARY KEY NOT NULL,
+    "days" varchar NOT NULL,
+    "time" varchar NOT NULL
   );
-  
+
   CREATE TABLE "site_settings" (
-  	"id" serial PRIMARY KEY NOT NULL,
-  	"brand_name" varchar DEFAULT 'ember.' NOT NULL,
-  	"title" varchar DEFAULT 'EMBER — Slow is a superpower.',
-  	"description" varchar DEFAULT 'Specialty coffee. Everyday magic. A little slower. A little better.',
-  	"currency" "enum_site_settings_currency" DEFAULT 'PHP' NOT NULL,
-  	"location_label" varchar DEFAULT 'Your neighborhood, soon.',
-  	"address" varchar,
-  	"contact_email" varchar,
-  	"updated_at" timestamp(3) with time zone,
-  	"created_at" timestamp(3) with time zone
+    "id" serial PRIMARY KEY NOT NULL,
+    "brand_name" varchar DEFAULT 'ember.' NOT NULL,
+    "title" varchar DEFAULT 'EMBER — Slow is a superpower.',
+    "description" varchar DEFAULT 'Specialty coffee. Everyday magic. A little slower. A little better.',
+    "currency" "enum_site_settings_currency" DEFAULT 'PHP' NOT NULL,
+    "location_label" varchar DEFAULT 'Your neighborhood, soon.',
+    "address" varchar,
+    "contact_email" varchar,
+    "updated_at" timestamp(3) with time zone,
+    "created_at" timestamp(3) with time zone
   );
-  
+
   ALTER TABLE "users_sessions" ADD CONSTRAINT "users_sessions_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."users"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "menu_items_flavor_notes" ADD CONSTRAINT "menu_items_flavor_notes_parent_id_fk" FOREIGN KEY ("_parent_id") REFERENCES "public"."menu_items"("id") ON DELETE cascade ON UPDATE no action;
   ALTER TABLE "menu_items" ADD CONSTRAINT "menu_items_image_id_media_id_fk" FOREIGN KEY ("image_id") REFERENCES "public"."media"("id") ON DELETE set null ON UPDATE no action;
